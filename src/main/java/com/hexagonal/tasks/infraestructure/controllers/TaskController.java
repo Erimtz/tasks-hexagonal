@@ -3,6 +3,7 @@ package com.hexagonal.tasks.infraestructure.controllers;
 import com.hexagonal.tasks.application.services.TaskService;
 import com.hexagonal.tasks.domain.models.AdditionalTaskInfo;
 import com.hexagonal.tasks.domain.models.Task;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
+@RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
