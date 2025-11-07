@@ -3,11 +3,20 @@ package com.hexagonal.tasks.application.services;
 import com.hexagonal.tasks.domain.models.AdditionalTaskInfo;
 import com.hexagonal.tasks.domain.models.Task;
 import com.hexagonal.tasks.domain.ports.in.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public class TaskService implements CreateTaskUseCase, DeleteTaskUseCase, GetAdditionalTaskInfoUseCase, RetrieveTaskUseCase, UpdateTaskUseCase {
+@Service
+@RequiredArgsConstructor
+public class TaskService implements
+        CreateTaskUseCase,
+        DeleteTaskUseCase,
+        GetAdditionalTaskInfoUseCase,
+        RetrieveTaskUseCase,
+        UpdateTaskUseCase {
 
 
     private final CreateTaskUseCase createTaskUseCase;
@@ -15,14 +24,6 @@ public class TaskService implements CreateTaskUseCase, DeleteTaskUseCase, GetAdd
     private final RetrieveTaskUseCase retrieveTaskUseCase;
     private final GetAdditionalTaskInfoUseCase getAdditionalTaskInfoUseCase;
     private final DeleteTaskUseCase deleteTaskUseCase;
-
-    public TaskService(CreateTaskUseCase createTaskUseCase, UpdateTaskUseCase updateTaskUseCase, RetrieveTaskUseCase retrieveTaskUseCase, GetAdditionalTaskInfoUseCase getAdditionalTaskInfoUseCase, DeleteTaskUseCase deleteTaskUseCase) {
-        this.createTaskUseCase = createTaskUseCase;
-        this.updateTaskUseCase = updateTaskUseCase;
-        this.retrieveTaskUseCase = retrieveTaskUseCase;
-        this.getAdditionalTaskInfoUseCase = getAdditionalTaskInfoUseCase;
-        this.deleteTaskUseCase = deleteTaskUseCase;
-    }
 
 
     @Override

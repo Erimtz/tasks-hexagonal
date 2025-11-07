@@ -3,6 +3,8 @@ package com.hexagonal.tasks.infraestructure.repositories;
 import com.hexagonal.tasks.domain.models.Task;
 import com.hexagonal.tasks.domain.ports.out.TaskRepositoryPort;
 import com.hexagonal.tasks.infraestructure.entities.TaskEntity;
+import com.hexagonal.tasks.infraestructure.mappers.TaskMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
@@ -11,39 +13,36 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class JpaTaskRespositoryAdapter implements TaskRepositoryPort {
+@RequiredArgsConstructor
+public class JpaTaskRepositoryAdapter implements TaskRepositoryPort {
 
     private final JpaTaskRepository jpaTaskRepository;
+    private final TaskMapper taskMapper;
 
-    public JpaTaskRespositoryAdapter(JpaTaskRepository jpaTaskRepository) {
-        this.jpaTaskRepository = jpaTaskRepository;
-    }
 
     @Override
     public Task save(Task task) {
-        TaskEntity taskEntity = TaskEntity.fromDomainModel(task);
-        TaskEntity savedTaskEntity = jpaTaskRepository.save(taskEntity);
-        return savedTaskEntity.toDomainModel();
+        TaskEntity taskEntity = taskMapper.toEntity(task);
+        return taskMapper.toDomain(jpaTaskRepository.save(taskEntity));
     }
 
     @Override
     public Optional<Task> findById(Long id) {
-        return jpaTaskRepository.findById(id).map(TaskEntity::toDomainModel);
+        return jpaTaskRepository.findById(id).map(taskMapper::toDomain);
     }
 
     @Override
     public List<Task> findAll() {
         return jpaTaskRepository.findAll().stream()
-                .map(TaskEntity::toDomainModel)
+                .map(taskMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Task> update(Task task) {
         if (jpaTaskRepository.existsById(task.getId())) {
-            TaskEntity taskEntity = TaskEntity.fromDomainModel(task);
-            TaskEntity updateTaskEntity = jpaTaskRepository.save(taskEntity);
-            return Optional.of(updateTaskEntity.toDomainModel());
+            TaskEntity taskEntity = taskMapper.toEntity(task);
+            return Optional.of(taskMapper.toDomain(jpaTaskRepository.save(taskEntity)));
         }
         return Optional.empty();
     }
